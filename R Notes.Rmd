@@ -1,0 +1,425 @@
+---
+title: "R Notes"
+author: "Christian von Uffel"
+date: "November 18, 2014"
+output: html_document
+---
+#R Notes
+
+The following are some of my notes from learning R. I need to update the file with code blocks that will activate the r code. Soon I will add in the notes I have taken from a few of my other classes:DASI, StatInf, RegMods
+
+Numbers in R are treated as numerical objects
+Pressing up on the d-pad recalls previously used commands from the console
+shift+option + d-pad direction selects a group of characters
+If you want an integer, add L to the end. IE 2L
+Inf is the value infinity
+NaN stands for Not a Number eg 0 / 0
+Dimnames
+Class
+help(function) brings up a simple description of the function
+example(function)
+min() returns the minimum value within a vector
+pmin() & pmax() returns the minimum value by location of two or more vectors such that (2,6), (3,5) (4,4) will return 2 4 as those are the minimum values by [1,] and [2,]
+you can replace selections within a vector by assigning values such that vector_example[2] <- x
+you can also add values to the end of a vector this way
+you can compare elements in a vector to another using == or other comparison symbols 
+na.rm stands for NA’s removed. you can set this to TRUE or FALSE
+new dimensions can be assigned by dim(vector) <- c(rows,columns)
+you can add a legend to an active chart by using the legend function
+legend("topright", levels(types), pch=1:length(levels(types)))
+
+Last Object - to get the last object in a series select the object using the length function: cars[length(cars)]
+Poker winnings from Monday to Friday
+```{r,echo=TRUE}
+poker_vector <- c(140, -50, 20, -120, 240)
+```
+Roulette winnings from Monday to Friday
+```{r,echo=TRUE}
+roulette_vector <- c(-24, -50, 100, -350, 10)
+names(poker_vector) <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+names(roulette_vector) <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+```
+Print the named vectors to the console
+```{r,echo=TRUE}
+poker_vector
+roulette_vector
+```
+Reassign names
+```{r,echo=TRUE}
+days_vector <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+names(poker_vector) <- days_vector
+names(roulette_vector) <- days_vector
+```
+The addition of two vectors will add the values together by position such that :
+```{r,echo=TRUE}
+Apple <- c(1,2,3)
+Orange <- c(4,5,6)
+Fruit <- Apple + Orange
+Fruit displays as 5,7,9
+roulette_vector <- c(-24, -50, 100, -350, 10)
+total_roulette <- sum(roulette_vector) stores the total of roulette vector
+answer <- total_poker > total_roulette will store the boolean logical question of which is larger in the new variable called answer
+```
+Poker winnings from Monday to Friday
+```{r,echo=TRUE}
+poker_vector <- c(140, -50, 20, -120, 240)
+```
+Roulette winnings from Monday to Friday
+```{r,echo=TRUE}
+roulette_vector <- c(-24, -50, 100, -350, 10)
+```
+Name poker and roulette
+```{r,echo=TRUE}
+days_vector <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+names(roulette_vector) <- names(poker_vector) <- days_vector
+```
+Define new variable based on a selection
+```{r,echo=TRUE}
+poker_wednesday <- poker_vector[3]
+poker_wednesday
+```
+brackets allow for the selection of the data in spot occupying the integer typed: 
+```{r,echo=TRUE}
+Stoplight <- c('Red','Yellow','Green')
+Stoplight[2]
+```
+‘Yellow’  single quotes or double quotes
+
+You can select a group of values by inputting a vector as a selection vector[1:n] or vector[c(1,5,6:9)], etc
+
+Define new variable based on a selection
+```{r,echo=TRUE}
+poker_midweek <- poker_vector[c(2,3,4)]
+```
+Show me the poker_midweek
+
+This will print the values contained in days Tues, Weds, Thurs
+alternatively, if the data is in sequence you may select a continuous series such as
+roulette_selection_vector <- roulette_vector[2:5]
+given our previous dataset
+Poker winnings from Monday to Friday
+poker_vector <- c(140, -50, 20, -120, 240)
+Roulette winnings from Monday to Friday
+roulette_vector <- c(-24, -50, 100, -350, 10)
+Name poker_vector and roulette_vector 
+days_vector <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+#days_vector can be used to concurrently name both variables elements
+names(roulette_vector) <- names(poker_vector) <- days_vector
+average_midweek_gain <- mean(poker_vector['Monday':'Wednesday'])
+Show me the
+average_midweek_gain
+By making use of comparison operators, we can approach the previous question in a more pro-active way.
+The (logical) comparison operators known to R are:
+< for less than
+> for greater than
+>= for greater than or equal to
+== for equal to each other
+!= not equal to each other
+c(4,5,6) > 5 returns: FALSE FALSE TRUE
+You can also select values using a logical operator
+selection_vector <- poker_vector > 0
+Select from poker_vector these days
+poker_winning_days <- poker_vector[selection_vector]
+Show me
+poker_winning_days
+or on one line of code using
+roulette_winning_days <- roulette_vector[roulette_vector > 0]
+Construction of a matrix with 3 rows containing the numbers 1 upto 9
+matrix(1:9, byrow=TRUE, nrow=3)
+proportion = nrow(subset(us12, response == "atheist"))/nrow(us12)
+nrow - counts the number of rows, ncol - counts the number of columns
+byrow=FALSE will cause the numbers to ascend by column instead of row
+    [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+
+using the matrix function we can concatenate vectors to create a table
+new.hope <- c(460.998007, 314.4)
+empire.strikes <- c(290.475067, 247.9)
+return.jedi <- c(309.306177, 165.8)
+star.wars.matrix <- matrix(c(new.hope, empire.strikes, return.jedi), byrow=TRUE, nrow=3)
+Show me the
+star.wars.matrix
+
+Add your code here such that rows and columns of star.wars have a name!
+colnames(star.wars.matrix) <- c('US', 'non-US')
+rownames(star.wars.matrix) <- c('A new hope', 'The empire strikes back', 'Return of the Jedi')
+box.office.all <- c(461, 314.4,290.5, 247.9,309.3,165.8)
+movie.names    <- c("A new hope","The empire strikes back","Return of the Jedi")
+col.titles     <- c("US","non-US")
+separates data into three rows and names the x value(rows) and y values(columns)
+star.wars.matrix <- matrix(box.office.all, nrow=3, byrow=TRUE,dimnames=list(movie.names,col.titles))
+dim(my.data.frame) displays the dimensions of my.data.frame listed as row count number and column count number
+names(my.data.frame) displays the names of variables of the data frame such as “year” “boys” “girls”
+plot(present$year,present$girls) plots the data variable “year” in x axis and “girls” in y axis from the data frame present
+plot(present$year, present$girls, type = "l") - adding type = “l” to the end of the plot command will create a line graph
+ type in ?function will bring up function documentation on how to use this function in R
+help(plot) will show how to use the function plot
+max function returns the highest value. which.max returns the corresponding x value or row to the highest value
+#one of the most important things to do is to set the working directory which you can do by doing the following
+setwd("~/Downloads")
+quizdata <- read.csv("hw1_data.csv")
+quizdata
+sums the number of NA instances within the vector Ozon
+sum(is.na(Ozon))
+#
+mean(x, na.rm=TRUE)
+bad <- is.na(x) 	stores values with NA
+x[!bad]			prints values without NA values
+grabs the subset of data with month equal to 6, and then calculates the mean
+six <- subset( data, Month ==6)
+mean(six[["Temp"]], trim= 0, na.rm= TRUE)
+number sequences don’t have to start at an integer
+2.5:10
+2.5 3.5 4.5 5.5...9.5 etc increases by one until number is reached
+#15:1 makes a reverse sequence
+| Remember that if you have questions about a particular R function, you can access
+| its documentation with a question mark followed by the function name:
+| ?function_name_here. However, in the case of an operator like the colon used above,
+| you must enclose the symbol in backticks like this: ?`:`. (NOTE: The backtick (`)
+| key is generally located in the top left corner of a keyboard, above the Tab key.)
+seq(1,10) 			sequence of 1 to 10
+seq(1,10, by=.5)  		#sequence of 1 to 10 by .5
+seq(5, 10, length=30) 		sequence of 5 to 10
+1:length(my_seq) 		builds sequence of the same length
+seq_along(my_seq) 		same but faster
+rep(0,times=40) 		creates a vector - replicates the value 0 by 40 times
+rep(c(0,1,2),times=10) 	it can also replicate vectors!
+rep(c(0,1,2),each=10) 	we want our vector to contain 10 zeros, then 10 ones, then 10 twos
+[1] 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2
+x <- 5
+x !=5 				!= (not equal to) logical operator will return false
+| If we have two logical expressions, A and B, we can ask whether at least one is TRUE
+| with A | B (logical 'or' a.k.a. 'union') or whether they are both TRUE with A & B
+| (logical 'and' a.k.a. 'intersection'). Lastly, !A is the negation of A and is TRUE
+| when A is FALSE and vice versa.
+| ((111 >= 111) | !(TRUE)) & ((4 + 1) == 5)		TRUE
+Let's say we want to join the
+| elements of my_char together into one continuous character string (i.e. a character
+| vector of length 1). We can do this using the paste() function.
+> paste(my_char, collapse = " ") the space in collapse creates the space between the words
+[1] "My name is"
+x[!is.na(x) & x > 0] 	conjunctions work in R!! | vertical line is the OR designator & is the AND designator
+			this code subsets the non-NA and positive values contained in vector x
+x[is.na(x)] subsets all of the NA values of the vector x
+x[is.na(x)== FALSE] 	subsets the vector x with all non-NA values contained
+x[!is.na(x)]		“!” designates the negation of a logical expression, so this gives us the same functionality
+x[c(-2, -10)] 		gives us all values of vector x except for the second and tenth elements
+x[-c(2, 10)]		or placing - in front of the function c allows us shorthand
+vect <- c(foo = 11, bar = 2, norf = NA)		creates values with corresponding names as titles
+you can create a table using the table command
+table(cdc$smoke100) creates table from the smoke100 subset of cdc data set
+gender_smokers = table(cdc$gender,cdc$smoke100)
+gender_smokers
+Plot the mosaicplot. Mosaicplot creates a plot of data that matches area to relative size
+mosaicplot(gender_smokers)
+in order to create a sample of data where there is none, you must create the data and can do so using the sample function which creates it according to your parameters
+> outcomes = c("heads", "tails")
+> sim_fair_coin = sample(outcomes,size=100,replace=TRUE)
+Until now you've been running simulations where each outcome had an equal probability. However, the sample function also allows you to set the probabilities. You can set these probabilities by adding an argument called prob to the sample function. This argument needs a vector of probability weights, one for each possible outcome. An example of such a vector for three possible outcomes is c(0.1, 0.6, 0.3). Note that for the fair coin the probability weight vector is c(0.5, 0.5). The default of the sample function (when no prob is given) is for all outcomes to have equal probability.
+hist()		#the histogram function
+
+Running a “for” loop to create an average of 5000 samples
+
+The vector 'sample_means50' is initialized with NA values
+The for loop runs 5000 times, with 'i' taking values 1 through 5000
+Step 1: Take a random sample of size 50
+Step 2: Store the mean of the sample in the 'sample_means50' vector on the ith
+    place
+```{r,echo=TRUE}    
+    sample_means50 = rep(NA, 5000)
+for (i in 1:5000) {
+    samp = sample(area, 50) 
+    sample_means50[i] = mean(samp)
+    Print the counter 'i'
+    print(i)
+}
+```
+Print the first few random medians
+```{r,echo=TRUE}
+head(sample_means50)
+```
+grab a clean dataset by using the na.omit function which will grab data excluding NA values
+modulo aka %% is the remainder function  for 17%%4 you’ll get 1
+
+by(nc$weight, nc$habit, mean)	the by() function allows the comparison of two different variables by the separation of the first variable by the second. this example would give the mean weight of habit 1 and habit 2 for  direct comparison 
+by(nc$weight,nc$habit, length)
+ANOVA stands for analysis of variance
+us12 = subset(atheism, atheism$nationality == "United States" & atheism$year == "2012")
+the subset function is a very useful function for creating a selection of interior data of a data set
+the margin of error is one half the distance between confidence intervals
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, showSquares = TRUE, leastSquares = TRUE)
+plots sum of squares, shows distance from predicted values, 
+plots the line of best fit by finding the minimum value of the least squares
+lm(runs ~ at_bats, data=mlb11)
+creates a basic linear model between the variable runs as a function of at_bats using the data set mlb11 
+
+To assess whether the linear model is reliable, you need to check for three things:
+linearity
+nearly normal residuals
+constant variability - homoscedasticity
+
+The 'evals' data frame is already loaded into the workspace
+```{r,echo=TRUE}
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/evals.RData"))
+```
+Create a scatterplot for 'age' vs 'bty_avg'
+```{r,echo=TRUE}
+plot(evals$age ~ evals$bty_avg)
+```
+Create a boxplot for 'age' and 'gender':
+```{r,echo=TRUE}
+boxplot(evals$age ~ evals$gender)
+```
+Create a mosaic plot for 'rank' and 'gender':
+```{r,echo=TRUE}
+mosaicplot(evals$rank ~ evals$gender)
+```
+The 'evals' data frame is already loaded into the workspace
+Your initial plot:
+```{r,echo=TRUE}
+plot(evals$score ~ jitter(evals$bty_avg))
+```
+Construct the linear model:
+```{r,echo=TRUE}
+m_bty <- lm(evals$score ~ evals$bty_avg)
+```
+Plot your linear model on your plot:
+```{r,echo=TRUE}
+abline(m_bty)
+```
+you can add a horizontal or vertical line to your plots by using the abline function
+abline(h = mean(limbs))
+
+the order of arguments is transposed for the correlation (cor) function compared to the normal input functions like plot. additionally the arguments are separated by a comma to indicate direction
+plot(evals$bty_f1lower ~ evals$bty_avg) 	Your scatterplot
+cor(evals$bty_avg, evals$bty_f1lower) 	Your correlation
+plot(evals[, 13:19]) creates plots showing visually correlation between variables contained in columns 13 through 19 against each other. allows a very quick visual impression of the correlation patterns
+The 'evals' data frame is already loaded into the workspace
+
+Your new linear model:
+m_bty_gen = lm(score ~ bty_avg + gender, evals)
+Study the outcome: 
+summary(m_bty_gen)
+Your linear model with rank and average beauty:
+m_bty_rank <- lm(score ~ bty_avg + rank, data=evals)
+summary(m_bty_rank)
+View the regression output:
+m_bty_rank
+the larger the coefficient, the larger the impact of the variable and the more it is expected to explain under under the model
+#If you look at the summary, you see that the coefficients and p-values of some variables changed. One of the things that makes multiple regression interesting is that coefficient estimates depend on the other variables that are included in the model.
+summary(m9)$adj.r.squared does this work for every formula or is this a custom formula?
+
+Load in the Quandl package with the help of library() here:
+```{r,echo=TRUE}
+library(Quandl)
+```
+Assign your first dataset to the variable:
+```{r,echo=TRUE}
+mydata = Quandl("NSE/OIL") 
+```
+the data set must be surrounded by quotes to indicate this is the name
+When you find a dataset on Quandl you can load it into R using the permalink suffix in the way listed above
+
+The quantmod package is ready for use:
+```{r,echo=TRUE}
+library(quantmod)
+```
+Load the Facebook data with the help of Quandl
+```{r,echo=TRUE}
+Facebook = Quandl("GOOG/NASDAQ_FB", type="xts")
+```
+Plot the chart with the help of candleChart()
+```{r,echo=TRUE}
+candleChart(Facebook)
+```
+Assign the Prague Stock Exchange to:
+```{r,echo=TRUE}
+PragueStockExchange = Quandl("PRAGUESE/PX")
+```
+Look up the first 3 results for 'Bitcoin' within the Quandl database:
+Quandl.search(query = "Bitcoin", page = 1, silent = FALSE) silent means Quandl will not print the results
+Assign
+```{r,echo=TRUE}
+BitCoin = Quandl("BCHAIN/TOTBC")
+```
+Assign to the variable Exchange
+```{r,echo=TRUE}
+Exchange = Quandl("QUANDL/USDEUR", start_date="2013-01-01", end_date= "2013-12-01")
+```
+The result:
+```{r,echo=TRUE}
+GDP_Change = Quandl("FRED/CANRGDPR", transformation="rdiff")
+```
+using the collapse parameter in Quandl options are: none|daily|weekly|monthly| quarterly|annual
+```{r,echo=TRUE}
+eiaQuarterly = Quandl("DOE/RWTC", collapse="quarterly")
+```
+Assign to TruSo the last 5 observations of the crude oil prices
+```{r,echo=TRUE}
+TruSo = Quandl("DOE/RWTC", rows=5, sort= "asc")
+```
+grabs the dataset "DOE/RWTC" between the below dates, sorts ascending and transforms the data by the row by row rate of change
+```{r,echo=TRUE}
+Final = Quandl("DOE/RWTC",start_date="2005-01-01", end_date="2010-03-01", sort="asc", transformation="rdiff")
+```
+Assign the url to the csv file
+```{r,echo=TRUE}
+data_url = "http://faculty.washington.edu/ezivot/econ424/sbuxPrices.csv"
+```
+Load the data frame using read.csv
+```{r,echo=TRUE}
+sbux_df = read.csv(data_url, header=TRUE,stringsAsFactors=FALSE)
+```
+sbux_df should be a data frame object. Data frames (matrices) are data objects typically with observations in rows and variables in columns
+The sbux_df data frame is already loaded in your workspace
+```{r,echo=TRUE}
+closing_prices = sbux_df[,"Adj.Close", drop=FALSE]
+```
+the str() function analyzes the structure of a dataset and is an important function to determine the best way to manipulate data
+the which() function can identify data with chosen parameters
+
+Find indices associated with the dates 3/1/1994 and 3/1/1995
+```{r,echo=TRUE}
+index_1 = which(sbux_df$Date == "3/1/1994")
+index_2 = which(sbux_df$Date == "3/1/1995")
+```
+Extract prices between 3/1/1994 and 3/1/1995
+```{r,echo=TRUE}
+some_prices = sbux_df[index_1:index_2,"Adj.Close"]
+  tiger = read.csv(myFiles[id])
+  mean(tiger$pollutant,na.rm=TRUE)
+    for(i in id) { 
+      df <- data.frame(NULL)
+      df<- rbind(df, read.csv(myFiles[i]))
+      filename = file.path(directory, sprintf("%03d.csv", i))
+      df = read.csv(filename)}
+```
+hitting the up arrow in the command console will recycle previously used commands for easy access and editing
+
+You can type the first two letters of the variable name, then hit the Tab key. Most programming environments will provide a list of variables that you've created that begin with 'my'. This is called auto-completion and can be quite handy when you have many variables in your workspace. Give it a try.
+
+Remember that if you have questions about a particular R function, you can access its documentation with a question mark followed by the function name: ?function_name_here. However, in the case of an operator like the colon used above, you must enclose the symbol in backticks like this: ?`:`. (NOTE: The backtick (`) key is generally located in the top left corner of a keyboard, above the Tab key. If you don't have a backtick key, you can use regular quotes.)
+seq(along = my_seq) creates a seq from 1 to the length of my_seq
+Finally, let's say that rather than repeating the vector (0, 1, 2) over and over again, we want our vector to contain 10 zeros, then 10 ones, then 10 twos. We can do this with the `each` argument. Try rep(c(0, 1, 2), each = 10).
+Hint: Both order and sort have a decreasing argument. "best" is the first element when decreasing = FALSE; "worst" is the first element when decreasing = TRUE.
+present[which.max(present$girls + present$boys),]
+indexing a row that contains the maximum value of the sum between boys and girls for a given year
+present[which.max(present$boys - present$girls),]
+finds the largest difference between boys and girls born
+
+This is how you run a For Loop
+
+sample_means50 = rep(NA, 5000)
+for (i in 1:5000) {
+    samp = sample(area, 50
+    sample_means50[i] = mean(samp)
+}
+a sample is taken from the dataset “area”. the mean of that sample is then stored in the location denoted by i, which is the length location of vector “sample_means50”. The means are stored sequentially replacing the NA’s currently in the vector. The order is important. Samp must be written first and not second because the first element “samp” is being made to be = to the second element “sample(area, 50)”
+
+print first 10 rows of mydata
+head(mydata, n=10)
+
+Question 10
+Let the slope having fit Y as the outcome and X as the predictor be denoted as β1. Let the slope from fitting X as the outcome and Y as the predictor be denoted as γ1. Suppose that you divide β1 by γ1; in other words consider β1/γ1. What is this ratio always equal to?
