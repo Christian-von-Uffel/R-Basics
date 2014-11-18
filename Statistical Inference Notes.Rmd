@@ -10,27 +10,10 @@ track earns a Statement of Accomplishment or Verified Certificate with Distincti
     Midterm: 20%
     Final: 30%
     
-    Required grade on final: greater than
-    q = ((11/12 + 12/12 + 14/15 + 13/14 + 13/13 + 10/10)/6); l = 1; mdtm= .9; prjt = (27/65)
-    (80-(q*20+l*15+mdtm*20+prjt*15+12))/15
-    
 Without Distinction    
     Quizzes: 30% (average of 6 highest quiz grades)
     Midterm: 30%
     Final: 40%
-
-    Required grade on final: greater than
-    (80-(q*30+mdtm*30+16))/20
-    
-    quiz<-c(11/12,12/12,14/15,13/14,11/12,13/13,10/10)
-    midterm<-27/30
-    labs<-c(100,100,100,100,100,100,100)
-    project<-27/65
-    final<-25/30
-
-If you have missed a quiz or a lab, please give the value as zero, so that the length of quiz and labs is 7. 
-
-Now copy paste the entire function given below to see your scores:
 
 myScore<-function(quiz,midterm,labs,project,final)
 {
@@ -44,20 +27,7 @@ myScore<-function(quiz,midterm,labs,project,final)
   fscore2<-round(fscore2,2)
   return (c(paste("Score with Distinction:", fscore,";","   Score without Distinction:", fscore2))) 
 }
-
 myScore(quiz,midterm,labs,project,final)
-
-This means that assuming you score a perfect grade on both the quizzes and the labs, you will need to score above 70 for the remaining average total of points for the course
-
-Grades
-
-QS  <- .20 * (11/12 + 12/12 + 14/15)/3
-L   <- .15 * (1 + 1 + 1 + 1 + 1 + 1)/6
-MT  <- .20 * (13/15 + 14/15)/2
-P   <- .15 * (.63)
-FNL <- .3  * (.63)
-
-FinalGrade <- QS + L + MT + P + FNL; FinalGrade
 
 # Homework 1
 ```{r,echo=TRUE}
@@ -118,14 +88,21 @@ chance a college graduate says online courses do not have the same value is:
 #.7024 ~ 70%
 ```
 Probability: Taken Course & Valuable
+```{r,echo=TRUE}
 (.23 *.39)
+```
 Probability: Taken Course & Not Valuable
+```{r,echo=TRUE}
 (.23 *.61)
+```
 Probability: Not Taken Course & Valuable
+```{r,echo=TRUE}
 (.77 *.27)
+```
 Probability: Not Taken Course & Not Valuable
+```{r,echo=TRUE}
 (.77 *.73)
-
+```
 What's the probability that a person saying "online courses are not as valuable" has taken an online course before? P(B|A)
 ```{r,echo=TRUE}
 (.23 *.61)/((.23 *.61) + (.77 *.73))
@@ -152,18 +129,21 @@ we can do the following
 1- pnorm(50, mean = 45, sd=3.2)
 ```
 **OR**
+```{r,echo=TRUE}
 pnorm(50, mean = 45, sd=3.2, lower.tail=FALSE)
-
+```
  What temperature are the coldest 20% of days in July below?
  Given mean=77, sd= 5
+```{r,echo=TRUE}
 qnorm(.2, mean = 77, sd=5, lower.tail=TRUE)
- **OR**
+```
+**OR**
+```{r,echo=TRUE}
 qnorm(.2, mean = 77, sd=5)
-
- Suppose we randomly select four individuals four an experiment in which the probability 
- of success is .35. What is the prob that exactly 1 will be successful?
- Well this is the  of successes: n!/(k!(n-k)!)
- Multiplied by the probability of a single scenario: p^k * (1-p)^(n-k)
+```
+Suppose we randomly select four individuals four an experiment in which the probability of success is .35. What is the prob that exactly 1 will be successful?
+Well this is the number of successes: n!/(k!(n-k)!)
+Multiplied by the probability of a single scenario: p^k * (1-p)^(n-k)
 ```{r,echo=TRUE}
 p = .35; n = 4; k= 1
 (factorial(n)/(factorial(k)*factorial(n-k))) * p^k * (1-p)^(n-k)
@@ -179,19 +159,22 @@ choose(n,k) *p^k * (1-p)^(n-k)
 
   Or the easist way:
 ```{r,echo=TRUE}
-      dbinom(1, size = 4, p = .35)
+dbinom(1, size = 4, p = .35)
 ```
- http://spark.rstudio.com/minebocek/dist_calc/
+http://spark.rstudio.com/minebocek/dist_calc/
 
- Calulate the probability of have 70 or more intances of success in a smaple size 245 
- where the probability of success is .25
- the mean expected outcome will be p * n
+Calulate the probability of have 70 or more intances of success in a smaple size 245 where the probability of success is .25
+The mean expected outcome will be p * n
+```{r,echo=TRUE}
 p = .25; n = 245; p*n
- mean = 61.25  we expect 61.25 successes in a pool of 245 binom trials
- sd is calculated as
+```
+mean = 61.25  we expect 61.25 successes in a pool of 245 binom trials
+sd is calculated as
 ```{r,echo=TRUE}
 sqrt(245 * p * (1-p))
- 6.77
+```
+Lastly, the calulate the area under the binomial dist curve for 70 or more successes
+```{r,echo=TRUE}
 sum(dbinom(70:245, size = 245, p = .25))
 ```
 
@@ -358,11 +341,11 @@ n = 9; mean = -2; sd = 2.1
 mean + qt(.975, n-1) * (sd/sqrt(n)) target = 0
 -2 +2.31 *(sd/sqrt(9)) -> 2.31* (sd/3) = 2
 (2/2.31)*3
-
+```{r,echo=TRUE}
 library(UsingR);data(father.son); x <- father.son$sheight
 (mean(x) + c(-1, 1) * qnorm(.975) * sd(x) / sqrt(length(x))) / 12
 4.65/sqrt(40)
-
+```
 Question 2
 Researchers studying anthropometry collected various body and skeletal measurements for 507 physically active individuals. The histogram below shows the sample distribution of heights in centimeters. If the 507 individuals are a simple random sample - and let’s assume they are - then the sample mean is a point estimate for the mean height of all active individuals. What measure do we use to quantify the variability of such an estimate?
 
@@ -395,9 +378,9 @@ Hypothesis testing for paired data
 5. Make a decision and interpret it in context of the research question
 
 Standard Error of the Difference between two means:
-```
+
 SE(xbar1-xbar2) = sqrt((var1^2)/n1+(var2^2)/n2)
-```
+
 **Bootstrapping**
 
 1. Take a bootstrap sample - a random sample taken with replacement from the original sample, of the same size as the original sample.
@@ -417,7 +400,7 @@ Bootstrap distributions are constructed by sampling with replacement from the or
 
 **Bootstrap Confidence Interval**
 
-People of different ages were asked to stand on a “force platform” and maintain a stable upright position. The ``wiggle" of the board in the forward-backward direction is recorded; more wiggle corresponds to less balance. The participants are divided into two age groups: young and elderly. The average wiggle among elderly people was 26.33 mm, and the average among young people was 18.125 mm. The bootstrap distribution for the difference in means is shown below, based on 100 bootstrap samples. Of the following choices, which is the most accurate 90% bootstrap confidence interval for the true difference in means? 
+People of different ages were asked to stand on a “force platform” and maintain a stable upright position. The ``wiggle" of the board in the forward-backward direction is recorded; more wiggle corresponds to less balance. The participants are divided into two age groups: young and elderly. The average wiggle among elderly people was 26.33 mm, and the average among young people was 18.125 mm. The bootstrap distribution for the difference in means is shown below, based on 100 bootstrap samples. Of the following choices, which is the most accurate 90% bootstrap confidence interval for the true difference in means?
 ```{r,echo=TRUE}
 26.33-18.125;
 ```
@@ -482,8 +465,6 @@ df = (n-1)-(j-1)    where   n = # of observations   &   j = # of groups
 pf(3.73,3,791,lower.tail=FALSE)
 ```
 
-
-
 **ANOVA Conditions**
 1. The observations should be independent within and across groups
   + each group sample must be < 10% population
@@ -517,16 +498,22 @@ SE = S/sqrt(n); SE
 xbar + qnorm(.998) * SE
 ```
 Because the upper limit does not reach the H0 price we reject the H0 and accept the HA.
-Another way of doing this problem is to find the zcore of the observation by 
+Another way of doing this problem is to find the zcore of the observation by
+```{r,echo=TRUE}
 (44.17 - 46.99)/(4.15/sqrt(52))
+```
 This gives us a zcore of -4.90, which far exceeds the threshold of confidence required to say this is a statistically significant difference
 
 4.35
+```{r,echo=TRUE}
 S= 1.8; n= 72; xbar = 6.83; alpha = .05; H0 = 7
 xbar + 1.96 *(S/sqrt(n)) > H0
+```
 H0 can not be rejected, as the 95% confidence range extends beyond H0
 Again we take the zscore,
+```{r,echo=TRUE}
 (6.83 - 7)/(1.8/sqrt(72))
+```
 -.80 is very much within the range of -1.96 and 1.96 zscores, we can not reject H0
 
 **EXAM**
@@ -542,6 +529,8 @@ SPAM          /        FLAGGED AS SPAM
 ```{r,echo=TRUE}
 (.09*.9)      /        (.09*.9 + .02*.91)
 ```
+Minimum sample size required to limit the margin of error to 4pts given 18pt standard deviation
+```{r,echo=TRUE}
 z <- qnorm(.9)
 ceiling((z*18/4)^2)
 
@@ -550,13 +539,14 @@ ceiling((z*18/4)^2)
 
 z <- qnorm(.975)
 ceiling((z*18/4)^2)
-
+```
 Imagine we were to construct a number of sampling distributions of a sample mean, where the only difference between each distribution is the sample size used. For each distribution constructed in this way we record the standard error and sample size. 
-Relationship between standard error and sample size
-
+Relationship between standard error and sample size:
+```{r,echo=TRUE}
 (15/sqrt(10))/10;(15/sqrt(20))/20;(15/sqrt(40))/40;(15/sqrt(80))/80
-
+```
 standard error goes down as sample size goes up
+
 ?matrix
 SEvSS<- matrix(c(.474, 10, .167, 20 , .059, 40, .021, 80), byrow=TRUE, nrow=4)
 plot(SEvSS)
