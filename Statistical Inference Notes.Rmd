@@ -1,0 +1,895 @@
+Statistical Inference Notes by Christian von Uffel
+========================================================
+
+**Grades**
+With Distinction (with labs and data analysis project): A final grade of 80% or above in this 
+track earns a Statement of Accomplishment or Verified Certificate with Distinction.
+    Quizzes: 20% (average of 6 highest quiz grades)
+    Lab: 15% (average of 6 highest lab grades)
+    Project: 15% (peer assessed)
+    Midterm: 20%
+    Final: 30%
+    
+    Required grade on final: greater than
+    q = ((11/12 + 12/12 + 14/15 + 13/14 + 13/13 + 10/10)/6); l = 1; mdtm= .9; prjt = (27/65)
+    (80-(q*20+l*15+mdtm*20+prjt*15+12))/15
+    
+Without Distinction    
+    Quizzes: 30% (average of 6 highest quiz grades)
+    Midterm: 30%
+    Final: 40%
+
+    Required grade on final: greater than
+    (80-(q*30+mdtm*30+16))/20
+    
+    quiz<-c(11/12,12/12,14/15,13/14,11/12,13/13,10/10)
+    midterm<-27/30
+    labs<-c(100,100,100,100,100,100,100)
+    project<-27/65
+    final<-25/30
+
+If you have missed a quiz or a lab, please give the value as zero, so that the length of quiz and labs is 7. 
+
+Now copy paste the entire function given below to see your scores:
+
+myScore<-function(quiz,midterm,labs,project,final)
+{
+  mquiz<-quiz[order(-quiz)][1:6]*100
+  mquiz2<-mean(mquiz)
+  mlabs<-labs[order(-labs)][1:6]
+  mlabs2<-mean(mlabs)
+  fscore<-0.2*mquiz2 + 0.15*mlabs2 + project*100*0.15 + midterm*100*0.20 + final*100*0.30
+  fscore<-round(fscore,2)
+  fscore2<-0.3*mquiz2 + midterm*100*0.30 + final*100*0.40
+  fscore2<-round(fscore2,2)
+  return (c(paste("Score with Distinction:", fscore,";","   Score without Distinction:", fscore2))) 
+}
+
+myScore(quiz,midterm,labs,project,final)
+
+This means that assuming you score a perfect grade on both the quizzes and the labs, you will need to score above 70 for the remaining average total of points for the course
+
+Grades
+
+QS  <- .20 * (11/12 + 12/12 + 14/15)/3
+L   <- .15 * (1 + 1 + 1 + 1 + 1 + 1)/6
+MT  <- .20 * (13/15 + 14/15)/2
+P   <- .15 * (.63)
+FNL <- .3  * (.63)
+
+FinalGrade <- QS + L + MT + P + FNL; FinalGrade
+
+# Homework 1
+```{r,echo=TRUE}
+q4 <- c(-4,1,1,1,1)
+var(q4)
+mean(q4)
+q4 - mean(q4)
+q4^2
+sum(q4^2)
+p <- c(.1, .2, .3, .4)
+x <- 2 : 5
+p*x
+sum(x ^ 2 * p) - sum(x * p) ^ 2
+```
+
+**Quiz 2**
+qnorm(.95, mean = 1100, sd= 75/sqrt(100))
+
+**Quiz 3**
+
+Question 1
+
+In a population of interest, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95% Student's T confidence interval for the mean brain volume in this new population?
+```{r,echo=TRUE}
+mean = 1100; N = 9; SD = 30
+mean - qt(.975, N-1) * SD/sqrt(N)
+mean + qt(.975, N-1) * SD/sqrt(N)
+```
+
+Question 2
+A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation of the difference in weight have to be for the upper endpoint of the 95% T confidence interval to touch 0?
+```
+mean = -2; N = 9;  SD 
+mean + qt(.975, N-1)* SD/sqrt(N) -> -2 + 2.31 * SD/3 = 0 -> 2.31 *SD = 6 -> 6/2.31 = 2.60
+6/qt(.975, N-1)
+```
+
+Question 4
+
+In a study of emergency room waiting times, investigators consider a new and the standard triage systems. To test the systems, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. 
+They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Consider the 95% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance. What is the interval? Subtract in this order (New System - Old System).
+
+**Conditional Probability**
+
+P(A|B) = P(A & B)/P(B)
+
+**General Multiplication Rule**
+
+P(A & B) = P(A|B)*P(B)
+
+23% taken online course; 39% of those say online courses provide the same value
+27% of those who have not taken an online course say that online provides the same value
+
+chance a college graduate says online courses do not have the same value is:
+1 - P(same|taken) - P(same|not_taken)
+```{r,echo=TRUE}
+1 - (.23*.39) -(.77*.27)
+#.7024 ~ 70%
+```
+Probability: Taken Course & Valuable
+(.23 *.39)
+Probability: Taken Course & Not Valuable
+(.23 *.61)
+Probability: Not Taken Course & Valuable
+(.77 *.27)
+Probability: Not Taken Course & Not Valuable
+(.77 *.73)
+
+What's the probability that a person saying "online courses are not as valuable" has taken an online course before? P(B|A)
+```{r,echo=TRUE}
+(.23 *.61)/((.23 *.61) + (.77 *.73))
+```
+this is simply the sum of the probability of Taken Course & Not Valuable /(Taken Course & Not Valuable + Not Taken Course & Not Valuable)
+
+percentiles can be easily calulated within R using the prnorm function
+```{r,echo=TRUE}
+pnorm(-1, mean = 0, sd= 1)
+```
+the answer we arive at is ~15% 
+this the percentile of an observation 1 standard deviation below the mean
+to do the reverse, finding a score given a percentile, we use the qnorm function
+```{r,echo=TRUE}
+qnorm(.90,  mean= 1500, sd = 300)
+```
+this gives us the score that is estimated to be the 90th percentile given a normal distribution
+and the inputed second and third arguments: mean, sd
+
+to find the percent of people who must pay for a baggage fee given: 
+50lb cutoff for fee, mean = 45 and sd= 3.2
+we can do the following
+```{r,echo=TRUE}
+1- pnorm(50, mean = 45, sd=3.2)
+```
+**OR**
+pnorm(50, mean = 45, sd=3.2, lower.tail=FALSE)
+
+ What temperature are the coldest 20% of days in July below?
+ Given mean=77, sd= 5
+qnorm(.2, mean = 77, sd=5, lower.tail=TRUE)
+ **OR**
+qnorm(.2, mean = 77, sd=5)
+
+ Suppose we randomly select four individuals four an experiment in which the probability 
+ of success is .35. What is the prob that exactly 1 will be successful?
+ Well this is the  of successes: n!/(k!(n-k)!)
+ Multiplied by the probability of a single scenario: p^k * (1-p)^(n-k)
+```{r,echo=TRUE}
+p = .35; n = 4; k= 1
+(factorial(n)/(factorial(k)*factorial(n-k))) * p^k * (1-p)^(n-k)
+```
+ **OR**
+```{r,echo=TRUE}
+4 * .35 * .65 * .65 * .65
+```
+ **OR**
+```{r,echo=TRUE}
+choose(n,k) *p^k * (1-p)^(n-k)
+```
+
+  Or the easist way:
+```{r,echo=TRUE}
+      dbinom(1, size = 4, p = .35)
+```
+ http://spark.rstudio.com/minebocek/dist_calc/
+
+ Calulate the probability of have 70 or more intances of success in a smaple size 245 
+ where the probability of success is .25
+ the mean expected outcome will be p * n
+p = .25; n = 245; p*n
+ mean = 61.25  we expect 61.25 successes in a pool of 245 binom trials
+ sd is calculated as
+```{r,echo=TRUE}
+sqrt(245 * p * (1-p))
+ 6.77
+sum(dbinom(70:245, size = 245, p = .25))
+```
+
+Sucess failure rule: a binomial distribution with at least 10 expected successes and 10 expected failures closely follows a normal distribution at least 10 successes and at least 10 failures
+```{r,echo=TRUE}
+p = .25
+max(c(10/p,10/(1-p)))
+```
+minimum sample size for normal approx where p = .25 is 40
+
+Which of the following probabilities can be calculated using the normal approximation to the binomial distribution?
+
+Roughly 20% of Americans smoke. What is the probability that in a random sample of 40 people at least 5 are smokers?
+```{r,echo=TRUE}
+p = .20; x= 40
+x> max(c(10/p,10/(1-p))) 
+```
+
+A September 2011 Gallup poll suggests that 56% of Americans do not have a great deal of confidence in the mass media to report the news fully, accurately, and fairly. What is the probability that in a random sample of 20 people, 10 or more of them have confidence in the mass media?
+```{r,echo=TRUE}
+p = .56; x= 20
+x> max(c(10/p,10/(1-p)))
+```
+
+A clothing store offers store credit cards and only about 17% of the credit card holders are males. If we were to randomly sample 100 store credit card holders to conduct a survey, what is the probability at most 20 of the sampled individuals would be males?
+```{r,echo=TRUE}
+p = .17; x= 100
+x> max(c(10/p,10/(1-p)))
+```
+
+A 2013 Gallup poll reports that 8% of Americans say the situation in Syria is the most important issue affecting the U.S. In a randomly selected group of 75 Americans, what is the probability that more than 10 of them believe the situation in Syria is the most important issue facing the U.S.?
+```{r,echo=TRUE}
+p = .08; x= 75
+x> max(c(10/p,10/(1-p)))
+```
+
+Suppose my iPod has 3000 songs and the mean length of a song is 3.45 minutes and the standard deviation is 1.63 minutes. What is the likihood that a 100 song playlist will last 6 hours?
+
+Distribution is likely right-skewed because of natural boundaries (zero) and no upper bounds
+```{r,echo=TRUE}
+#3.45 +/- (1.63/sqrt(100)) : expected mean +/- SE(variance/sqrt(sample size))
+#6*60 = 360; 360/100 = 3.6; 1.63/sqrt(100)
+zscore <- (3.6 - 3.45)/(1.63/sqrt(100))
+pnorm(zscore, mean = 0, sd=1, lower.tail = FALSE)
+```
+
+We know from the CLT that means on samples will approach the standard normal distribution as the number of sample means rises, we also know that samples from the population will most accurately represent the original population data set
+plot(lm(hp ~ wt, data = mtcars))
+scatterplotMatrix(mtcars[, c(4,6,7)])
+
+glm function is more powerful than the general lm model
+gaussian family?
+car package companions of auto regression
+conf inf
+
+**Limiting Margin of Error**
+Previous studies suggest the standard deviation of 3-year old iq scores is 18 points.
+How many children shoud researchers study in order to obtain a 90% confidence interval of + or - 4points?
+
+1 = 1.65 / 4 * (18/sqrt(n)) 
+# OR 
+```{r,echo=TRUE}
+n = (1.65*18/4)^2
+ceiling(n)
+```
+the formula for the required number (n) is (the zcore value at confidence interval * the standard deviation / the desired margin of error) ^2
+
+SAT scores are distributed with a mean of 1,500 and a standard deviation of 300. You are interested in estimating the average SAT score of first year students at your college. If you would like to limit the margin of error of your 95% confidence interval to 25 points, at least how many students should you sample?
+```{r,echo=TRUE}
+n = (1.96*300/25)^2
+ceiling(n)
+```
+
+What is the chance that the true mean of the population is 3 given the previous example where the mean is 3.2 and the sd= .246 at a 95% confidence level?
+```{r,echo=TRUE}
+pnorm(3, mean= 3.2, sd= .246)
+.05 > pnorm(3, mean= 3.2, sd= .246)
+```
+Since the p value (21%) is greater the the sample statistic p value (5%), we can not 
+reject the null hypothesis that college students have 3 exclusive relationships.
+ 
+Interpreting the p value:
+
+If the population mean of college students is in fact 3 exclusive relationships, we have a 21%
+chance that we would observe a mean of 3.2 or higher within a random sample of size 50
+
+Confidence interval for point estimates
+point estimate +/- (zcore * SE)
+```{r,echo=TRUE}
+.33 + (1.96 *.014)
+```
+
+**Duke Unit 3**
+
+Researchers investigating characteristics of gifted children collected data from schools in a large city on a random sample of thirty-six children who were identified as gifted children soon after they reached the age of four. The following histogram shows the distribution of the ages (in months) at which these children first counted to 10 successfully. Also provided are some sample statistics. Suppose you read online that children first count to 10 successfully when they are 32 months old, on average. You perform a hypothesis test evaluating whether the average age at which gifted children first count to 10 is different than the general average of 32 months. What is the p-value of the hypothesis test? Choose the closest answer.
+```{r,echo=TRUE}
+(30.69 - 32)/(4.31/sqrt(36))
+```
+This gives us the zscore, we then calculate the p-value of this observation.
+The alternative hypothesis test is 2-sided so we must calculate the probability of observing an outcome as or more extreme within either tail.
+```{r,echo=TRUE}
+2 * pnorm(-1.82)
+```
+
+Create a 90% confidence interval using the previous problem's sample statistics.
+We want the tails to add up to the total of 10% so use the .05 and .95 thresholds
+```{r,echo=TRUE}
+30.69 + qnorm(c(.05,.95)) * (4.31/sqrt(36))
+```
+the range is 29.51 - 31.87
+
+SAT scores are distributed with a mean of 1,500 and a standard deviation of 300. You are interested in estimating the average SAT score of first year students at your college. If you would like to limit the margin of error of your 98% confidence interval to 40 points, at least how many students should you sample?
+
+(zcore*stddev/MarginOfError)^2
+```{r,echo=TRUE}
+(qnorm(.99)*(300/40))^2
+```
+SAT scores are distributed with a mean of 1,500 and a standard deviation of 300. You are interested in estimating the average SAT score of first year students at your college. If you would like to limit the margin of error of your 95% confidence interval to 25 points, at least how many students should you sample?
+```{r,echo=TRUE}
+ceiling((1.96*300/25)^2)
+```
+A company offering online speed reading courses claims that students who take their courses show a 5 times (500%) increase in the number of words they can read in a minute without losing comprehension. A random sample of 100 students yielded an average increase of 415% with a standard deviation of 220%. 
+
+Calculate a 95% confidence interval for the average increase in number of words students can read in a minute without losing comprehension. Choose the closest answer.
+```{r,echo=TRUE}
+415 + 1.96*(220/sqrt(100))
+415 - 1.96*(220/sqrt(100))
+```
+
+**Binomial Distribution** - describes the probability of having exactly k successes in n Bernouli trials with probability of success p
+
+Is it Binomial? Four Conditions to check
+1. The trials are independant
+2. The number of trial, n, is fixed
+3. Each trial can be classified as success or failure
+4. The probability p remains constant
+
+**Binominal Probability**
+The odds of getting n successes in k binomial trials is
+
+choose(k,n) * p^k * (1-p)^n-k
+
+**Normal Approximation of the Binomial Distribution**
+      mu = np       ;      sd= sqrt(np(1-p))
+np and np(1-p) must be greater than 10
+```{r,echo=TRUE}
+n = 40; p = .26
+n*p <=10 & n*p*(1-p) <=10
+```
+In a population of interest, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95% Student's T confidence interval for the mean brain volume in this new population?
+
+The t value is always larger than the z value typically used for confidence intervals so while the z value is 1.96 for a populations 2 standard deviations away, a t value starts at the z value at infinity and becomes larger as the sample size approaches 1.
+
+For this example we use the qt funtion which is the quantile of the student (t) distribution and we subtract one degree of freedom from the sample size as part of the calculation
+```{r,echo=TRUE}
+n = 9; mean = 1100; sd = 30
+mean - qt(.975, n-1) * (sd/sqrt(n)) 
+mean + qt(.975, n-1) * (sd/sqrt(n)) 
+```
+
+A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation of the difference in weight have to be for the upper endpoint of the 95% T confidence interval to touch 0?
+
+n = 9; mean = -2; sd = 2.1 
+mean + qt(.975, n-1) * (sd/sqrt(n)) target = 0
+-2 +2.31 *(sd/sqrt(9)) -> 2.31* (sd/3) = 2
+(2/2.31)*3
+
+library(UsingR);data(father.son); x <- father.son$sheight
+(mean(x) + c(-1, 1) * qnorm(.975) * sd(x) / sqrt(length(x))) / 12
+4.65/sqrt(40)
+
+Question 2
+Researchers studying anthropometry collected various body and skeletal measurements for 507 physically active individuals. The histogram below shows the sample distribution of heights in centimeters. If the 507 individuals are a simple random sample - and let’s assume they are - then the sample mean is a point estimate for the mean height of all active individuals. What measure do we use to quantify the variability of such an estimate?
+
+Standard Error - sd/sqrt(n)
+```{r,echo=TRUE} 
+9.4/sqrt(507)
+```
+
+Question 12
+SAT scores are distributed with a mean of 1,500 and a standard deviation of 300. You are interested in estimating the average SAT score of first year students at your college. If you would like to limit the margin of error of your 95% confidence interval to 25 points, at least how many students should you sample?
+
+n = (95% confidence z-score * standard deviation / target Margin of error) ^2
+```{r,echo=TRUE}
+n = (1.96*300/25)^2
+ceiling(n)
+```
+
+**Unit 4 - Inference for Numerical Variables**
+
+Hypothesis testing for paired data
+
+1. H0: mu_diff  = 0
+   HA: mu_diff != 0
+2. Calculate the oint estimate: xdiff
+3. Check conditions:
++ Independence: ndiff < 10% of population
++ SampleSize/Skew: ndiff >= 30, larger if population is very skewed
+4. Draw sampling distribution, shade p-value, calculate test statistic
++ Z = (xdiff - mudiff)/SExbardiff
+5. Make a decision and interpret it in context of the research question
+
+Standard Error of the Difference between two means:
+```
+SE(xbar1-xbar2) = sqrt((var1^2)/n1+(var2^2)/n2)
+```
+**Bootstrapping**
+
+1. Take a bootstrap sample - a random sample taken with replacement from the original sample, of the same size as the original sample.
+2. Calculate the bootstrap statistic - mean, median, proportion, etc computed on the bootstrap sample
+3. Repeat steps 1 & 2 many times to create a bootstrap distibution
+
+**Bootstrapping Limitations**
+
+* Not as rigid conditions as Central Limit Theorem
+* If bootstrap smaple is skewed, bootstrap interval may be unreliable
+* Representative sample is required for generalization
+* Biased sample results in biased bootstrap estimates
+
+Bootstrap distributions that are extremely skewed or have isolated clumps of values may yield unreliable confidence intervals.    	
+The endpoints of a 95% bootstrap confidence interval are the cutoff values for the top and bottom 2.5% of the bootstrap distribution.			
+Bootstrap distributions are constructed by sampling with replacement from the original sample, while sampling distributions are constructed by sampling with replacement from the population.
+
+**Bootstrap Confidence Interval**
+
+People of different ages were asked to stand on a “force platform” and maintain a stable upright position. The ``wiggle" of the board in the forward-backward direction is recorded; more wiggle corresponds to less balance. The participants are divided into two age groups: young and elderly. The average wiggle among elderly people was 26.33 mm, and the average among young people was 18.125 mm. The bootstrap distribution for the difference in means is shown below, based on 100 bootstrap samples. Of the following choices, which is the most accurate 90% bootstrap confidence interval for the true difference in means? 
+```{r,echo=TRUE}
+26.33-18.125;
+```
+
+**Paired Data** - Two sets of observations are paired if each observation has a special connection with exactly one observation in the other dataset
+
+**CLT for Normal Data** - the sample distribution of the mean is nearly normal when the observations are independant and come from a nearly normal distribution
+
+**T Distribution**
+
+* When n is small and standard deviation is unknown for the population we use the T distribution
+* Bell shaped but thicker tails than a normal distribution
+    + mitigates the effects of a less reliable standard error of the sampling distribution
+* One parameter, degrees of freedom, determines tail thickness
+* For inference on a mean
+    + sigma unknown
+    + n < 30
+* More conservative resulting confidence interval
+
+DF = n - 1
+
+T-scores are slightly higher than Z-scores for the same significance levels
+
+**ANOVA - Analysis of Variance**
+
+To compare means of two groups we use a Z or T statistic
+To compare means of 3+ groups we use the ANOVA test and F statistic
+
+H0: m1 = m2 = ...mk
+HA: At least one means is different from each other
+
+F = Variability between Groups/Variability within Groups
+
+F distribution is right skewed
+
+In order to obtain a large F statistic and reject H0, the variability between sample means must be larger than within sample means
+
+Sum of Squares Total - measures the total variability in the response variable
+
+Sum of Squares Groups 
+* measures the variability between groups
+* explained variability
+
+Sum of Squares Error
+* measures the variability within groups
+* unexplained variability
+
+Mean Squares
+* Average variability between and within groups
+* Sum of Squares/ Degrees of Freedom
+
+F Statistic
+* Ratio of Group Mean Square / Error Mean Square
+
+P value of F statistic
+* The probability of at least as large an f-statistic if the means of all groups is in fact equal
+
+**ANOVA Degrees of Freedom**
+
+df = (n-1)-(j-1)    where   n = # of observations   &   j = # of groups
+```
+pf(3.73,3,791,lower.tail=FALSE)
+```
+
+
+
+**ANOVA Conditions**
+1. The observations should be independent within and across groups
+  + each group sample must be < 10% population
+2. The data within each group are nearly normal
+3. The variability across the groups is about equal
+
+the aov function evaluates analysis of variance
+```
+gssAnova=aov(gss$educ~gss$race)
+summary(gssAnova)
+```
+**Bonferroni Correction**
+* More stringent significance levels are appropriate for multiple comparisons
+* adjust significance by the number of comparisons being considered
+
+alpha* = significance level/number of comparisons
+    a* = a/K
+     K = k*(k-1)/2
+
+How many pairwise tests would we need to do in order to compare all pairs of means to each other?
+For five groups we would need 5*(5-1)/2. We need 10 pairwise tests.
+
+**Pairwise Comparisons**
+
+SE = sqrt((MSE1/n1)+(MSE2/n2))
+
+4.34
+```{r,echo=TRUE}
+S = 4.15; n= 52; xbar = 44.17
+SE = S/sqrt(n); SE
+xbar + qnorm(.998) * SE
+```
+Because the upper limit does not reach the H0 price we reject the H0 and accept the HA.
+Another way of doing this problem is to find the zcore of the observation by 
+(44.17 - 46.99)/(4.15/sqrt(52))
+This gives us a zcore of -4.90, which far exceeds the threshold of confidence required to say this is a statistically significant difference
+
+4.35
+S= 1.8; n= 72; xbar = 6.83; alpha = .05; H0 = 7
+xbar + 1.96 *(S/sqrt(n)) > H0
+H0 can not be rejected, as the 95% confidence range extends beyond H0
+Again we take the zscore,
+(6.83 - 7)/(1.8/sqrt(72))
+-.80 is very much within the range of -1.96 and 1.96 zscores, we can not reject H0
+
+**EXAM**
+
+Spam. It is estimated that roughly 9% of incoming email is spam. A spam filter flags 90% of spam emails as spam, and incorrectly flags 2% of non-spam emails as spam. 
+
+What is the probability that a randomly chosen incoming email is flagged as spam? Choose the closest answer.
+```{r,echo=TRUE}
+.09*.9 + .02*.91
+```
+Given that an email is flagged as spam, what is the probability that it is indeed a spam email?
+SPAM          /        FLAGGED AS SPAM
+```{r,echo=TRUE}
+(.09*.9)      /        (.09*.9 + .02*.91)
+```
+z <- qnorm(.9)
+ceiling((z*18/4)^2)
+
+z <- qnorm(.995)
+ceiling((z*18/4)^2)
+
+z <- qnorm(.975)
+ceiling((z*18/4)^2)
+
+Imagine we were to construct a number of sampling distributions of a sample mean, where the only difference between each distribution is the sample size used. For each distribution constructed in this way we record the standard error and sample size. 
+Relationship between standard error and sample size
+
+(15/sqrt(10))/10;(15/sqrt(20))/20;(15/sqrt(40))/40;(15/sqrt(80))/80
+
+standard error goes down as sample size goes up
+?matrix
+SEvSS<- matrix(c(.474, 10, .167, 20 , .059, 40, .021, 80), byrow=TRUE, nrow=4)
+plot(SEvSS)
+
+Calculating the Confidence Interval between Independant Means
+
+(xbar1 - xbar2) +/- 95% zscore * sqrt(var1^2/n1 + var2^2/n2)
+```{r,echo=TRUE}
+2.4 +c(-1.96,1.96) * sqrt((15.14^2 /505)+ (15.12^2 /667))
+```
+**Unit 5 - Inference for Categorical Variables**
+
+Note that the standard error calculation for the confidence interval and the hypothesis test are different when dealing with proportions, since in the hypothesis test we need to assume that the null hypothesis is true – remember: p-value = P(observed or more extreme test statistic | H0 true).
+
+**Confidence Interval for a Proportion**
+```{r,echo=TRUE}
+phat = .24 ; n = 3226
+SEphat = sqrt((phat*(1-phat)/n)); zscore = qt(.995,n-1)
+phat + zscore * SEphat
+qnorm(.995) # normal dist
+qt(.995,99) # student dist - small sample size
+```
+
+1. the observations in the sample are independent,
+2. the sample size is sufficiently large 
+    + success/failure condition: np ≥ 10 and n(1 − p) ≥ 10
+    
+Calculate the sample size required to have a margin of error within 2% with a 90% confidence interval
+```
+ME = zscore * SE =< m
+```
+```{r,echo=TRUE}
+p=.013; m=.02; zscore = qnorm(.95)
+ceiling((p*(1-p))/(m/zscore)^2)
+ceiling((.013*(1-.013))/(.02/1.65)^2)
+```
+A recent estimate of Congress’ approval rating was 17%.5 What sample size does this estimate suggest we should use for a margin of error of 0.04 with 95% confidence?
+ME = zscore * SE =< m ?
+```{r,echo=TRUE}
+p=.17; m=.04; zscore = qnorm(.975)
+ceiling((p*(1-p))/(m/zscore)^2)
+```
+
+**Pooled estimate of a proportion**
+
+When the null hypothesis is p1 = p2, it is useful to find the pooled estimate of the shared proportion:
+  
+phat = number of “successes”/ number of cases = (phat1 * n1 + phat2 * n2) / (n1 + n2)
+
+Here pˆ1n1 represents the number of successes in sample 1 since pˆ1 = number of successes in sample 1
+n1
+Similarly, pˆ2n2 represents the number of successes in sample 2.
+
+**Use the pooled proportion estimate when H0 : p1 = p2**
+When the null hypothesis suggests the proportions are equal, we use the pooled proportion estimate (phat) to verify the success-failure condition and also to estimate the standard error:
+
+In response to complaints from residents about too many (about 15%) of the cars passing by the local school speeding, the police started closely monitoring traffic. You want to check if the police’s efforts had an effect on the prevalence of speeding in this area. One day you observe 560 different cars pass by the school, and find that 70 of them were speeding. You calculate a p-value of 0.0976. Assuming the cars are representative of all cars that drive by the school, which of the following is true?
+```{r,echo=TRUE}
+70/560
+.15-.125
+.125*560; .175*560
+```
+We use a random sample of 50 observations where p^ = 0.36. Which of the following is the correct standard error? Choose the closest answer.
+```{r,echo=TRUE}
+sqrt((.3*.7)/50)
+24*7/(26+24)
+```
+6.17
+Using Equation (6.16), pˆ = 0.345, n1 = 491, and n2 = 945, verify the estimate for the standard error is SE = 0.026. Next, complete the hypothesis test using a significance level of 0.05. Be certain to draw a picture, compute the p-value, and state your conclusion in both statistical language and plain language.
+```{r,echo=TRUE}
+phat <- .345; n1 = 491; n2 = 945
+se = sqrt((phat*(1-phat))/n1+(phat*(1-phat)/n2)); se
+phatdiff = (191/(191+304))-(300/(300+641)); null = 0
+(phatdiff-null)/se
+```
+If true we can not reject H0, if false we reject H0
+```{r,echo=TRUE}
+qnorm(.975) * se > phatdiff
+```
+To load inference function -
+
+source("http://bit.ly/dasi_inference")
+
+**ChiSquare Statistic**
+
+chisquare (x^2) : sum for all instances ((observed-expected)^2/expected)
+
+```
+expected <- c(2007, 302, 20, 73, 98)
+observed <- c(1920, 347, 19, 84, 130)
+chivector = rep(NA,5)
+for (i in 1:5)  { (observed[i] - expected[i])^2 / expected[i] => chivector[i] }
+pchisq(22.63, df= 4, lower.tail = FALSE)
+```
+In response to complaints from residents about too many (about 15%) of the cars passing by the local school speeding, the police started closely monitoring traffic. You want to check if the police’s efforts had an effect on the prevalence of speeding in this area. One day you observe 560 different cars pass by the school, and find that 70 of them were speeding. You calculate a p-value of 0.0976. Assuming the cars are representative of all cars that drive by the school, which of the following is true?
+```{r,echo=TRUE}
+phat = .15; pobs= 70/560; n = 560
+2 * pnorm((pobs-phat)/sqrt((.15*.85)/560))
+```
+From this calculation we can see that this is the value of both tails
+
+Gallup conducts an annual poll of U.S. residents. Approximately 1,000 residents across all 50 states and Washington D.C. are asked “Do you believe the use of marijuana should be made legal?” The distribution of responses by date of survey is shown in the table below. Imagine a hypothesis test evaluating whether there is a difference from 2012 to 2013 between proportions of “yes” responses. Using the information in the table below, calculate the standard error for this hypothesis test. Choose the closest answer
+
+2012: 493/1037        2013: 596/1028
+```{r,echo=TRUE}
+phat1 = 493/1037; n1= 1037; phat2= 596/1028; n2 = 1028
+```
+H0: p= 493/1037
+HA: p != 493/1037
+```{r,echo=TRUE}
+se = sqrt((phat2 * (1-phat2)) /n2); se
+sqrt((0.5273608*(1-0.5273608)/1037)+(0.5273608*(1-0.5273608)/1028))
+```
+
+**Unit 6 - Linear Regression**
+
+Regression line formula
+yhat = B0 + x1 * B1
+B0 - intercept      B1 - slope
+
+R - correlation
+R^2 - the percentage of variation 
+
+Data = Fit + Residual
+
+7.20 Body measurements, Part III. Exercise 7.13 introduces data on shoulder girth and height of a group of individuals. The mean shoulder girth is 108.20 cm with a standard deviation of 10.37 cm. The mean height is 171.14 cm with a standard deviation of 9.41 cm. The correlation between height and shoulder girth is 0.67
+
++ Write the equation of the regression line for predicting height.
+```{r,echo=TRUE}
+xbar = 108.20 ; sx = 10.37 ; ybar = 171.14; sy = 9.41; R = .67
+b1 = sy/sx * R;         b1
+b0 = ybar - b1 * xbar;  b0
+yhat = b0 + b1 * x
+```
++ Interpret the slope and the intercept in this context.
+
+For each additional inch in shoulder girth we expect a person to be .61 inches taller
+
++ Calculate R2 of the regression line for predicting height from shoulder girth, and interpret it in the context of the application.
+
+R squared is equal to .4489. This means that 44.89% of the variance in the response variable can be explained by the linear regression line
+
++ A randomly selected student from your class has a shoulder girth of 100 cm. Predict the height of this student using the model.
+
+b0 + b1 * 100
+The height of this student is predicted to be `r b0 + b1 * 100`
+
+(e) The student from part (d) is 160 cm tall. Calculate the residual, and explain what this residual means.
+
+observed - expected
+160 - (b0 + b1 * 100)
+-6.15
+
+(f) A one year old has a shoulder girth of 56 cm. Would it be appropriate to use this linear model to predict the height of this child?
+
+7.23 Helmets and lunches. The scatterplot shows the relationship between socioeconomic status measured as the percentage of children in a neighborhood receiving reduced-fee lunches at school (lunch) and the percentage of bike riders in the neighborhood wearing helmets (helmet). The average percentage of children receiving reduced-fee lunches is 30.8% with a standard deviation of 26.7% and the average percentage of bike riders wearing helmets is 38.8% with a standard deviation of 16.9%.
+
+a) R^2 = .72 what is R?
+R = -(.72^.5)
+b) what is the regression line formula?
+helmets = y reduced lunch = x
+sy =16.9; sx = 26.7; ybar = 38.8; xbar = 30.8
+b1 = sy/sx * R
+b0 = ybar - b1 * xbar
+yhat = b0 + b1 * x
+c)
+In a population where 0% receive free lunch, we would expect that 55.3% would wear helmets
+d)
+There are appears to be a negative linear association with decreasing variation (heteroscedascity)
+E)  What would the value of the residual be for a neighborhood where 40% of the children receive reduced-fee lunches and 40% of the bike riders wear helmets? Interpret the meaning of this residual in the context of the application.
+40 - (b0 + b1 * 40)
+we would expect the percentage of people wearing helmets to be 6.14 percentage points higher than the result observed
+
+**Unit 7 - Multiple Linear Regression**
+
+**Adjusted R Squared**
+
+Rsq_adj = 1 - (SSE/SST) * (n-1/n-k-1)
+
+* k is never negative -> adjusted r squared is always lower than r squared
+* k is the number of predictors
+* the number of predictors a model can handle increases as the number of observations rises
+* useful for preventing false confidence through overplotting
+* We choose models with higher adjusted R squared over others
+
+**Collinear**
+* Two predictor variables are said to be collinear when they are correlated with each other
+* Predictors are called independant variables, so they should be independant of each other
+* Inclusion of collinear predictors complicates model estimation
+    + estimates may no longer be reliable
+    
+**Parsimony**
+
+* Avoid adding predictors associated with each other because their addition often detracts from model quality
+* Prefer the simplest best model - the Parsimonious model
+    + The highest predictive power and lowest # of variables
+    + Occam's Razor: Among competing hypotheses the one with the fewest assumptions should be selected
+    
+**Inference for Regression Models**
+
+H0: slopes are equal to 0
+HA: at least 1 slope is not equal to 0
+
+If the probability of one of the slopes being = 0 is less than the significance level, we reject the null hypothesis
+
+**Testing for Slope - Mechanics**
+
+Use a t statistic in inference for regression
+
+general formula:
+    t = (b1 - 0)/SEb1
+    df = n - k - 1    n = observations    k = predictor variables
+pt(t-statistic, df, lower.tail = FALSE) * 2    
+
+```{r,echo=TRUE}
+library(DAAG)
+data(allbacks)
+book_mlr = lm(weight ~ volume + cover, data=allbacks)
+summary(book_mlr)
+
+states = read.csv("http://bit.ly/dasi_states")
+poverty_slr = lm(poverty ~ female_house, data=states)
+summary(poverty_slr)
+anova(poverty_slr)
+
+cognitive = read.csv("http://bit.ly/dasi_cognitive")
+names(cognitive)
+cog_full = lm(kid_score ~ mom_hs + mom_iq+mom_work+mom_age, data = cognitive)
+summary(cog_full)
+cog_final = lm(kid_score ~ mom_hs + mom_iq + mom_work, data = cognitive)
+summary(cog_final)
+plot(cog_final$residuals ~ cognitive$mom_iq)
+hist(cog_final$residuals)
+qqnorm(cog_final$residuals)
+qqline(cog_final$residuals)
+plot(cog_final$residuals ~ cog_final$fitted)
+plot(abs(cog_final$residuals) ~ cog_final$fitted)
+plot(cog_final$residuals)
+```
+
+Multiple Linear regression Exercises
+8.3
+  bwt gestation parity age height weight smoke 
+1 120 284       0      27  62     100    0
+Calculate the residual
+Redidual of observation 1 is `r 120 - (-80.41 + .44 * 284 -3.33 * 0 -.01 * 27 +1.14 * 62 +.05 * 100 -8.40 * 0)`
+
+R Squared
+```{r,echo=TRUE}
+var_ei = 249.28; var_obs = 332.57; n = 1236; k = 6 # k = dim(dataset)[2]
+rsq = 1 - (var_ei/var_obs)
+rsq
+rsq_adj = 1 - ((var_ei/var_obs) * (n - 1)/(n - k - 1))
+rsq_adj
+```
+
+Calculate the residual for the first observation in the data set: a student who is aboriginal, male, a slow learner, and missed 2 days of school.
+```{r, echo=TRUE}
+2 - (18.93 - 9.11*0 + 3.10*1 +2.15*1)
+```
+
+```{r,echo=TRUE}
+var_ei = 240.57; var_obs = 264.17; n = 146; k = 3 # k = dim(dataset)[2]
+rsq = 1 - (var_ei/var_obs)
+rsq
+rsq_adj = 1 - ((var_ei/var_obs) * (n - 1)/(n - k - 1))
+rsq_adj
+```
+
+Question 5 MLR Quiz
+```{r,echo=TRUE}
+var_ei = 22790; var_obs = 87530; n = 51; k = 2 # k = dim(dataset)[2]
+rsq = 1 - (var_ei/var_obs)
+rsq
+rsq_adj = 1 - ((var_ei/var_obs) * (n - 1)/(n - k - 1))
+rsq_adj
+```
+Confidence intervals for Multiple Linear Regression Slopes
+8.6
+```{r,echo=TRUE}
+#b1 + or - tscore of the given confidence level times standard error of the slope
+n = 31; k = 2; df = n - k - 1; b1 = .34; seb1 = .13
+b1 - qt(.975, df) * seb1
+b1 + qt(.975, df) * seb1
+# if observed t-value is more than qt(confidence, df) you can reject H0
+```
+
+One tree in this sample is 79 feet tall, has a diameter of 11.3 inches, and is 24.2 cubic feet in volume. Determine if the model overestimates or underestimates the volume of this tree, and by how much.
+
+Ei = observation - (intercept + slope1 * x1 .... slopey * xy)
+`r 24.2 - (-57.99 + .34*79 + 4.71 * 11.3)`
+Redisual is positive. The model underestimated the cubic volume of this tree
+
+Final Exam Review
+
+Bayesian Inference
+
+This is the relative probabilities among two possible choices with the given data. Whichever choice is more likely is the one we favor. Observed in data = obs
+
+```{r, echo=TRUE}
+obs = 4 ; n = 20; prob1 =.1; prob2 = .2
+# This tests the probability that prob1 is the true population average
+dbinom(obs,n,prob1)/ (dbinom(obs,n,prob1) +  dbinom(obs,n,prob2))
+# We get around 44% for this outcome. The reverse is simply the compliment of this outcome. So we get 
+1 - dbinom(obs,n,prob1)/ (dbinom(obs,n,prob1) +  dbinom(obs,n,prob2))
+# as the relative probability of prob2 being the true population average
+```
+
+The dnorm( ) function returns the height of the normal curve at some value along the x-axis.
+
+required # of observations for 80% confidence for ME <= 4pts with sd of 18
+con = .80; sd = 18; me = 2
+q = 1-(1-con)/2
+n = ceiling((qnorm(q)*sd/me)^2) ; n
+
+Final Exam
+
+Caffeine. In a double-blind experiment a sample of male college students were asked to tap their fingers at a rapid rate. The sample was then divided at random into two groups of 10 students each. Students in the first group drank two cups of coffee (approximately 200 mg of caffeine), and students in the second group drank two cups of decaffeinated coffee (0 mg of caffeine). After a two hour period, each student was tested to measure finger tapping rate (taps per minute). The average number of taps in the caffeine group was 248.3 and in the no caffeine group was 244.8. The distributions are shown below.
+
+98% confidence interval
+
+248.3 - 244.8 = 3.5
+
+3.5 - 2.65; 6.48 - 3.5
+(243,251)
+3.5 - 0.87; 6.13- 3.5
+
+3.5 --2.76; 9.76 - 3.5
+
+Athletes on drugs. If an athlete is tested for a certain type of drug use (e.g. steroids), the test result will either be positive or negative. However, these tests are never perfect. Some drug-free athletes test positive (false positives), and some drug users test negative (false negatives). Let’s assume that 5% of all athletes use drugs, 3% of all tests on drug-free athletes yield false positives, and 7% of all tests on drug users yield false negatives. Suppose a typical athlete is tested. If this athlete tests positive, what is the probability that he is indeed a drug user?
+```{r,echo=TRUE}
+use_drugs = .05 ; false_positive = .03; false_negative = .07
+test_positive = (false_positive * (1 - use_drugs)) + use_drugs - (use_drugs*false_negative)
+drug_user_positive = use_drugs * (1-false_negative)
+drug_user_positive / test_positive
+```

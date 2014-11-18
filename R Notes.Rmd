@@ -4,7 +4,7 @@ author: "Christian von Uffel"
 date: "November 18, 2014"
 output: html_document
 ---
-#R Notes
+## R Notes
 
 The following are some of my notes from learning R. I need to update the file with code blocks that will activate the r code. Soon I will add in the notes I have taken from a few of my other classes:DASI, StatInf, RegMods
 
